@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.Statement;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -135,7 +136,19 @@ public class GamePanel extends JPanel implements KeyListener{
         if(GameOver(posx,posy,curShapeType,curShapeState))
         {
             JOptionPane.showConfirmDialog(null, "遊戲結束！", "提示", JOptionPane.OK_OPTION);
+            Sqlcon X=new Sqlcon();
+            X.MYSQLlogin("127.0.0.1","database","testuser","v4GtTyH1ws9RFZ1r",3306);
+            try{
+                Statement statement = Sqlcon.getConnection().createStatement();
+                statement.execute("INSERT INTO ur (score) VALUES ('" + score + "');");
+                statement.close();
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
             System.exit(0);
+
         }
     }
     public boolean GameOver(int x, int y, int ShapeType, int ShapeState)//判斷遊戲是否結束
